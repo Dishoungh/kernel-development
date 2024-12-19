@@ -6,4 +6,6 @@ This README will document the process of me learning kernel development and modi
 
 First, I forked and added the [Linux kernel for Raspberry Pi](https://github.com/Dishoungh/linux-rpi.git) as a submodule.
 
-Testin
+Now, install the Raspberry Pi Kernel Header files: `sudo apt install raspberrypi-kernel-headers`.
+
+
