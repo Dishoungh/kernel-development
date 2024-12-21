@@ -17,6 +17,9 @@
 #include <linux/slab.h>         // kmalloc()
 #include <linux/uaccess.h>      // copy_to/from_user()
 
+#define TIMEOUT_SEC             0       // 0 Seconds
+#define TIMEOUT_NSEC            500000L // 5 milliseconds
+
 #define MEM_SIZE                1024
 
 static struct cdev      dishoungh_cdev;
@@ -42,6 +45,9 @@ struct ioctl_arguments kernel_parameters = {0};
 ** Function Prototypes
 */
 
+static struct hrtimer   drv_hr_timer;
+static unsigned int     count = 0;
+
 static int              drv_open(struct inode* inodeptr, struct file* fileptr);
 static int              drv_release(struct inode* inodeptr, struct file* fileptr);
 static ssize_t          drv_read(struct file* fileptr, char __user* buf, size_t len, loff_t* off);
@@ -64,6 +70,14 @@ static struct file_operations fops =
         .write          = drv_write,
         .unlocked_ioctl = drv_ioctl,
 };
+
+//Timer Callback function. This will be called when timer expires
+enum hrtimer_restart timer_callback(struct hrtimer *timer)
+{
+    printk(KERN_INFO "Timer Callback function Called [%d]\n", count++);
+    hrtimer_forward_now(timer, ktime_set(TIMEOUT_SEC, TIMEOUT_NSEC));
+    return HRTIMER_RESTART;
+}
 
 /*
 ** "open" handler
@@ -210,6 +224,14 @@ static int __init my_driver_init(void)
                 return -1;
         }
 
+        // Setup Timer
+        ktime_t ktime = ktime_set(TIMEOUT_SEC, TIMEOUT_NSEC);
+        hrtimer_init(&drv_hr_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+        drv_hr_timer.function = &timer_callback;
+
+        // Start Timer
+        hrtimer_start(&drv_hr_timer, ktime, HRTIMER_MODE_REL);
+
         printk(KERN_INFO "Kernel Module Inserted Successfully...\n");
         
         return 0;
@@ -220,6 +242,7 @@ static int __init my_driver_init(void)
 */
 static void __exit my_driver_exit(void)
 {
+        hrtimer_cancel(&drv_hr_timer);
         kfree(kernel_buffer);
         device_destroy(dev_class, dev);
         class_destroy(dev_class);
@@ -234,4 +257,4 @@ module_exit(my_driver_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Dishoungh White II <dishounghwhiteii@gmail.com>");
 MODULE_DESCRIPTION("Simple linux driver (Dynamically allocating the Major and Minor number)");
-MODULE_VERSION("1.2");
+MODULE_VERSION("1.5");
