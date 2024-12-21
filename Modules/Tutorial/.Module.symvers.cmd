@@ -1,1 +1,0 @@
-savedcmd_/home/dishoungh/workspace/kernel-development/Modules/Tutorial/Module.symvers :=  scripts/mod/modpost -M -m -a      -o /home/dishoungh/workspace/kernel-development/Modules/Tutorial/Module.symvers -T /home/dishoungh/workspace/kernel-development/Modules/Tutorial/modules.order -i Module.symvers -e 
