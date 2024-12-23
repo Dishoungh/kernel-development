@@ -30,6 +30,8 @@ Since this is my first Linux kernel driver for GPIO, it sucks. I won't worry too
 
 How it works is that GPIO(X) is an offset of GPIO Chip 571. If you check the label for `/sys/class/gpio/gpiochip571/label`, you should get "pinctrl-rp1". This should describe the 40-pin GPIO header.
 
+You can tell by reading the kernel debug files: `cat /sys/kernel/debug/gpio`
+
 For example, GPIO5 should correspond to GPIO ID 571 + 5 = 576. To export that GPIO pin:
 
 `echo 576 > /sys/class/gpio/export`
