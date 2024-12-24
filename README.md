@@ -8,13 +8,15 @@ First, I forked and added the [Linux kernel for Raspberry Pi](https://github.com
 
 Now, install the Raspberry Pi Kernel Header files and Device Tree Compiler (DTC): `sudo apt install raspberrypi-kernel-headers device-tree-compiler`
 
+Just for reference, here is the Raspberry Pi 5 Pinout diagram:
+
+![Raspberry Pi Pinout Diagram](./Images/raspberry-pi-5-gpio-pinout-diagram.png)
+
 # <ins>GPIO</ins>
 
-For this, I want to control GPIO17 as demonstrated in the image below:
+For this, I want to control Pin 11 (GPIO 17)
 
-![GPIO Use Pinout Diagram](./Images/RPI5_GPIO.png)
-
-Below is the circuit I lazily made on a breadboard, using 3 LEDs and some resistors.
+Below is the circuit I lazily made on a breadboard, using 1 LED and a 2K resistor.
 
 ![Lazy Breadboard Circuit](./Images/Ugly_Circuit_Setup.jpg)
 
@@ -40,14 +42,35 @@ This should now create `/sys/class/gpio/gpio576`. In this directory, there shoul
 
 # <ins>SPI</ins>
 
-[TBD]
+I will play with the SPI interface using the [SSD1306 OLED display](https://community.microcenter.com/kb/articles/795-inland-1-3-128x64-oled-graphic-display) I got from MicroCenter.
+
+I connected the Raspberry Pi to the SSD1306 in the following manner (refer to the Pinout diagram above):
+
+- GND  --> Pin 9 (Ground)
+- Vcc  --> Pin 1 (3.3V)
+- CLK  --> Pin 23 (SCLK)
+- MOSI --> Pin 19 (MOSI)
+- RES  --> Pin 18 (GPIO 24)
+- DC   --> Pin 16 (GPIO 23)
+- CS   --> Pin 24 (CE0)
+
+Looking into the [RPI5 device tree](https://github.com/raspberrypi/linux/blob/rpi-6.6.y/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts), it seems like I'll be modifying `&spi0`.
+
+
 
 # <ins>I2C</ins>
 
 [TBD]
 
+## Industrial I/O
+
+[TBD]
+
 # Helpful References
 
+- [Raspberry Pi 5 Pinout Diagram](https://pinout.ai/raspberry-pi-5)
+- [Linux Kernel Source for Raspberry Pi](https://github.com/raspberrypi/linux)
 - [Official Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/)
 - [EmbeTronix Device Driver Tutorials](https://embetronicx.com/tutorials/linux/device-drivers/linux-device-driver-part-1-introduction/)
 - [GPIO Drivers on RPI5](https://emlogic.no/2024/09/linux-drivers-getting-started-with-gpio-on-raspberry-pi-5/)
+- [SSD1306 Datasheet](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf)
