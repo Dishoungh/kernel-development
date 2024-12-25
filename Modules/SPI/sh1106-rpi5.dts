@@ -1,0 +1,23 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2712";
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			&spi0 {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				status = "okay";
+				num-cs = <1>;
+
+				sh1106@0x0 {
+					compatible = "dishoungh,sh1106";
+					res-gpios = <&rp1_gpio 24 1>; // Active Low
+					dc-gpios = <&rp1_gpio 23 0>; // Active High 
+				};
+			};
+		};
+	};
+};
