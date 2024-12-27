@@ -16,9 +16,9 @@ Just for reference, here is the Raspberry Pi 5 Pinout diagram:
 
 # <ins>GPIO</ins>
 
-For this, I want to control Pin 11 (GPIO 17)
+For this, I want to control Pin 29 (GPIO 5)
 
-Below is the circuit I lazily made on a breadboard, using 1 LED and a 2K resistor.
+Below is the circuit I lazily made on a breadboard.
 
 ![Lazy Breadboard Circuit](./Images/Ugly_Circuit_Setup.jpg)
 
@@ -44,27 +44,13 @@ This should now create `/sys/class/gpio/gpio576`. In this directory, there shoul
 
 # <ins>SPI</ins>
 
-I will play with the SPI interface using the [SH1106 OLED display](https://community.microcenter.com/kb/articles/795-inland-1-3-128x64-oled-graphic-display) I got from MicroCenter. Unfortunately, the device is poorly documented, but according to a comment on one of the reviews, the display chip is a SH1106.
-
-Regardless, just seeing any activity on the SPI lines will be enough for me considering I haven't used my oscilloscope in years lol. Let's keep it real, I'm not going to be wasting a ton of my time troubleshooting this setup. And considering the SH1106 is very similar to the SSD1306, I'll just copy EmbeTronix's implementation.
-
-At this point, I don't even care if it works at all anymore.
-
-I connected the Raspberry Pi to the SH1106 in the following manner (refer to the Pinout diagram above):
-
-- GND  --> Pin 9 (Ground)
-- Vcc  --> Pin 1 (3.3V)
-- CLK  --> Pin 23 (SCLK)
-- MOSI --> Pin 19 (MOSI)
-- RES  --> Pin 18 (GPIO 24)
-- DC   --> Pin 16 (GPIO 23)
-- CS   --> Pin 24 (CE0)
+For the SPI, I honestly just want to see something on my oscilloscope. Unfortunately, I'm too lazy to set up something that will act as a slave device for my Raspberry Pi.
 
 # <ins>I2C</ins>
 
-The device I will be interacting with for I2C is the [CCS811](https://cdn.sparkfun.com/assets/2/c/c/6/5/CN04-2019_attachment_CCS811_Datasheet_v1-06.pdf). Luckily, I found [someone who already made a device driver for it](https://github.com/sss22213/linux_driver_for_AMS_ccs811/tree/master).
+The device I will be interacting with for I2C is the [CCS811](https://cdn.sparkfun.com/assets/2/c/c/6/5/CN04-2019_attachment_CCS811_Datasheet_v1-06.pdf).
 
-Because I'm getting lazier and lazier by the day, I'll just study this guy's driver.
+**[The rest of this section is TBD]**
 
 # Conclusion
 
@@ -80,3 +66,4 @@ Disappointingly, I wasn't able to bring myself to wanting to figure out the SH11
 - [SH1106 Datasheet](https://www.displayfuture.com/Display/datasheet/controller/SH1106.pdf)
 - [How to Make a Custom SPI Driver](https://mkmints.wixsite.com/embtech/post/linux-spi-driver-tutorial-building-a-custom-spi-device)
 - [CCS811 I2C Driver](https://github.com/sss22213/linux_driver_for_AMS_ccs811/tree/master)
+- [Johannes4Linux Kernel Tutorials](https://github.com/Johannes4Linux/Linux_Driver_Tutorial_legacy)

@@ -1,0 +1,32 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2712";
+	
+	// Disable spidev0 as spi0 is coming from spidev0 node
+	fragment@0 {
+		target = <&spidev0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+	
+	fragment@1 {
+		target-path = <&spi0>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			
+			test_spi: test_spi@0 {
+				status = "okay";
+				compatible = "dishoungh,test-spi";
+				reg = <0x0>;
+				
+				spi-max-frequency = <4000>;
+				spi-bits-per-word = <8>;	
+			};	
+		};
+	};
+};
